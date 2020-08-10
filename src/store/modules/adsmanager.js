@@ -11,7 +11,7 @@ export default {
   namespaced: true,
   state: {
     activeTab: localStorage.getItem('adsmanager-active-tab') ?
-      JSON.parse(localStorage.getItem('adsmanager-active-tab')) : {tab: 1, component: 'accounts'},
+      JSON.parse(localStorage.getItem('adsmanager-active-tab')) : { tab: 1, component: 'accounts' },
     filters: {
       tags:
         typeof localStorage.getItem('adsmanager-filters-tags') === 'undefined'
@@ -20,8 +20,8 @@ export default {
       dates:
         localStorage.getItem('adsmanager-filters-dates') === null
           ? {
-            startDate: moment().format('YYYY-MM-DD'),
-            endDate: moment().format('YYYY-MM-DD'),
+            startDate: moment().startOf('year').format('YYYY-MM-DD'),
+            endDate: moment().endOf('year').format('YYYY-MM-DD'),
           }
           : JSON.parse(localStorage.getItem('adsmanager-filters-dates')),
     },

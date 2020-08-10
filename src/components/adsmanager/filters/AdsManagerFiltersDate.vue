@@ -4,6 +4,7 @@
     style="width: 100%;"
     :locale-data="localeData"
     auto-apply
+    control-container-class=""
     @select="changeDates"
   >
     <template
