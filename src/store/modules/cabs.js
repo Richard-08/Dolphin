@@ -140,6 +140,7 @@ export default {
         state.filters.name && 
         state.filters.name.toString().length > 0
       ) {
+        console.log(cabs.length);
         cabs = cabs.filter(cab => {
           if (cab.name) {
             return cab.name.toString().toLowerCase().search(state.filters.name.toString().toLowerCase()) > -1;

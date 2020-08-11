@@ -27,7 +27,10 @@ export default {
     loading: {
       mainTable: false,
     },
-    stat: []
+    stat: [],
+    filters: {
+      name: '',
+    }
   },
   getters: {
     ...mixinDialogGetters,
@@ -61,11 +64,33 @@ export default {
     SET_FILTERED: (state, payload) => {
       state.campaigns.filtered = payload;
     },
+
+    FILTER_CAMPAIGNS: (state) => {
+      let campaigns = state.campaigns.all;
+      const filters = state.filters;
+
+      if (filters.name) {
+        if (filters.name.length > 0) {
+          console.log(filters.name);
+          campaigns = campaigns.filter(campaign => {
+            return (
+              campaign.name.toString().toLowerCase().search(filters.name.toLowerCase()) !== -1
+            );
+          });
+        }
+      }
+
+      state.campaigns.filtered = campaigns;
+    },
+
+    SET_FILTERS_NAME: (state, payload) => {
+      state.filters.name = payload;
+    }
   },
   actions: {
     ...mixinDialogActions,
 
-    async loadCampaigns({commit, rootState, dispatch}) {
+    async loadCampaigns({ commit, rootState, dispatch }) {
       const data = {
         users_ids: rootState.users.users.selected.length > 0 ?
           rootState.users.users.selected.map(user => user.id) :
@@ -82,7 +107,7 @@ export default {
       };
 
       console.log(JSON.stringify(data));
-      
+
       const response = await this._vm.api.post('/campaigns', data);
       if (response.data.success) {
         response.data.data.forEach(campaign => {
@@ -125,6 +150,11 @@ export default {
 
     async saveSelected(context, data) {
       context.commit('SET_SELECTED', data);
+    },
+
+    async setFilterName(context, payload) {
+      context.commit('SET_FILTERS_NAME', payload);
+      context.commit('FILTER_CAMPAIGNS');
     },
 
     async clearSelected(context) {
